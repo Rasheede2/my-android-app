@@ -25,8 +25,17 @@ jobs:
         with:
           gradle-version: '8.9'
 
+      - name: Give execute permission to gradlew
+        run: chmod +x gradlew
+        continue-on-error: true
+
       - name: Build debug APK
-        run: ./gradlew assembleDebug --no-daemon
+        run: |
+          if [ -f ./gradlew ]; then
+            ./gradlew assembleDebug --no-daemon
+          else
+            gradle assembleDebug --no-daemon
+          fi
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
